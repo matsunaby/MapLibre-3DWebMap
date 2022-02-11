@@ -11,41 +11,20 @@ var map =  new maplibregl.Map({
 })
 
 map.on('load', function () {
-    map.addSource('sample', {
+    map.addSource('shelter_point', {
         type: 'geojson',
-        data: './data/nagasaki_polygon.geojson'
+        data: './data/nagasaki_shelter.geojson'
     });
 
     // スタイルを設定
     map.addLayer({
-        'id': 'sample',
-        'type': 'fill',
-        'source': 'sample',
+        'id': 'shelter',
+        'type': 'circle',
+        'source': 'shelter_point',
         'layout': {},
         'paint': {
-        'fill-color': '#088',
-        'fill-opacity': 0.8
-        }      
+            'circle-color': '#FF0000',
+            'circle-radius': 5
+        }   
     });
 });
-
-/* // GeoJSON を読み込みレイヤを表示する
-function addGeoJSONLayer(map){
-    // データソースを定義
-    map.addSource('sample', {
-        type: 'geojson',
-        data: './data/nagasaki_polygon.geojson'
-    });
-
-    // スタイルを設定
-    map.addLayer({
-        'id': 'sample',
-        'type': 'fill',
-        'source': 'sample',
-        'layout': {},
-        'paint': {
-        'fill-color': '#088',
-        'fill-opacity': 0.8
-        }      
-    });
-} */
