@@ -10,10 +10,20 @@ var map =  new maplibregl.Map({
     localIdeographFontFamily: false
 })
 
+// UIツール
+// 右下のズームレベルの＋−ボタンを表示する
+map.addControl(new maplibregl.NavigationControl(), 'bottom-right');
+// 右上の現在位置の取得ボタンを表示する
+map.addControl(new maplibregl.GeolocateControl({positionOptions: {enableHighAccuracy: true},trackUserLocation: true}), 'top-right');
+// 左下の尺度を表示する
+map.addControl(new maplibregl.ScaleControl() );
+
+// 画面がロードされたら地図にレイヤを追加する
 map.on('load', function () {
+    // 避難所情報レイヤを追加
     map.addSource('shelter_point', {
         type: 'geojson',
-        data: './data/sample_point.geojson'
+        data: './data/nagasaki_shelter.geojson'
     });
 
     // スタイルを設定
@@ -27,26 +37,50 @@ map.on('load', function () {
             'circle-radius': 5
         }   
     });
+
+    // 投稿情報レイヤを追加
+    map.addSource('post_info', {
+        type: 'geojson',
+        data: './data/sample_point.geojson'
+    });
+
+    // スタイルを設定
+    map.addLayer({
+        'id': 'post_info',
+        'type': 'circle',
+        'source': 'post_info',
+        'layout': {},
+        'paint': {
+            'circle-color': '#008000',
+            'circle-radius': 5
+        }   
+    });
 });
 
-// UIツール
-// 右下のズームレベルの＋−ボタンを表示する
-map.addControl(new maplibregl.NavigationControl(), 'bottom-right');
-// 右上の現在位置の取得ボタンを表示する
-map.addControl(new maplibregl.GeolocateControl({positionOptions: {enableHighAccuracy: true},trackUserLocation: true}), 'top-right');
-// 左下の尺度を表示する
-map.addControl(new maplibregl.ScaleControl() );
-
-// 避難所の地物をクリックしたときに、コメントを表示する
+// 避難所情報の地物をクリックしたときに、コメントを表示する
 map.on('click', 'shelter_point', function (e) {
+    console.log("click")
+    
+    var coordinates = e.features[0].geometry.coordinates.slice();
+    var name = e.features[0].properties.name;
+     
+    while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+    coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+    }
+     
+    new maplibregl.Popup()
+    .setLngLat(coordinates)
+    .setHTML(name)
+    .addTo(map);
+});
+
+// 投稿情報の地物をクリックしたときに、コメントを表示する
+map.on('click', 'post_info', function (e) {
     console.log("click")
     
     var coordinates = e.features[0].geometry.coordinates.slice();
     var comment = e.features[0].properties.comment;
      
-    // Ensure that if the map is zoomed out such that multiple
-    // copies of the feature are visible, the popup appears
-    // over the copy being pointed to.
     while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
     coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
     }
@@ -64,5 +98,15 @@ map.on('mouseenter', 'shelter_point', function () {
      
 // Change it back to a pointer when it leaves.
 map.on('mouseleave', 'shelter_point', function () {
+    map.getCanvas().style.cursor = '';
+});
+
+// Change the cursor to a pointer when the mouse is over the places layer.
+map.on('mouseenter', 'post_info', function () {
+    map.getCanvas().style.cursor = 'pointer';
+});
+     
+// Change it back to a pointer when it leaves.
+map.on('mouseleave', 'post_info', function () {
     map.getCanvas().style.cursor = '';
 });
