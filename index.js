@@ -39,16 +39,16 @@ map.on('load', function () {
     });
 
     // 投稿情報レイヤを追加
-    map.addSource('post_info', {
+    map.addSource('disaster', {
         type: 'geojson',
-        data: './data/sample_point.geojson'
+        data: './data/disaster.geojson'
     });
 
     // スタイルを設定
     map.addLayer({
-        'id': 'post_info',
+        'id': 'disaster',
         'type': 'circle',
-        'source': 'post_info',
+        'source': 'disaster',
         'layout': {},
         'paint': {
             'circle-color': '#008000',
@@ -75,7 +75,7 @@ map.on('click', 'shelter_point', function (e) {
 });
 
 // 投稿情報の地物をクリックしたときに、コメントを表示する
-map.on('click', 'post_info', function (e) {
+map.on('click', 'disaster', function (e) {
     console.log("click")
     
     var coordinates = e.features[0].geometry.coordinates.slice();
@@ -102,11 +102,19 @@ map.on('mouseleave', 'shelter_point', function () {
 });
 
 // Change the cursor to a pointer when the mouse is over the places layer.
-map.on('mouseenter', 'post_info', function () {
+map.on('mouseenter', 'disaster', function () {
     map.getCanvas().style.cursor = 'pointer';
 });
      
 // Change it back to a pointer when it leaves.
-map.on('mouseleave', 'post_info', function () {
+map.on('mouseleave', 'disaster', function () {
     map.getCanvas().style.cursor = '';
 });
+
+/* // チェックボックスのオンオフでレイヤの表示/非表示を切り替える
+
+$(#shelter-layer).click(function(){
+    if(!$(this).prop('checked')){
+        map.removeLayer('shelter_point');
+    }
+}); */
