@@ -80,6 +80,11 @@ map.on('click', 'disaster', function (e) {
     
     var coordinates = e.features[0].geometry.coordinates.slice();
     var comment = e.features[0].properties.comment;
+
+    // コメントに改行コードが含まれている場合、改行タグに変換する
+    if(comment.match('\n')){
+        comment = comment.replace('\n', '<br>');
+    }
      
     while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
     coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
