@@ -31,6 +31,14 @@
       "maxZoom": 14,
       "minzoom": 4,
       "maxzoom": 16
+    },
+    "gake": {
+      "type": "raster",
+      "tiles": [
+        "https://disaportaldata.gsi.go.jp/raster/05_kyukeishakeikaikuiki_data/42/{z}/{x}/{y}.png"
+      ],
+      "minzoom": 2,
+      "maxzoom": 17
     }
   },
   "sprite": "https://tile.openstreetmap.jp/styles/maptiler-basic-ja/sprite",
@@ -979,7 +987,8 @@
           "hsl(39, 41%, 86%)"
         ]
       }
-    }
+    },
+    {"id": "gake", "type": "raster", "source": "gake"}
   ],
   "id": "aj6j3uopp"
 }
