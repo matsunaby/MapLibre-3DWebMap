@@ -20,6 +20,25 @@ map.addControl(new maplibregl.ScaleControl() );
 
 // 画面がロードされたら地図にレイヤを追加する
 map.on('load', function () {
+
+    // 土砂災害警戒危険区域レイヤを追加
+    map.addSource('dosya-keikai', {
+        type: 'geojson',
+        data: './data/nagasaki_dosya-keikai.geojson'
+    });
+
+    // スタイルを設定
+    map.addLayer({
+        'id': 'dosya-keikai',
+        'type': 'fill',
+        'source': 'dosya-keikai',
+        'layout': {},
+        'paint': {
+            'fill-color': 'Red',
+            'fill-opacity': 0.5
+        }   
+    });
+
     // 避難所情報レイヤを追加
     map.addSource('shelter_point', {
         type: 'geojson',
